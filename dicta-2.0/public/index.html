@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Dicta</title>
+    <!-- Usaremos tipografía moderna -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="extra.css">
+    <link rel="stylesheet" href="desktop.css">
+    <!-- Carga de socket.io del servidor -->
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-anim"></div>
+    
+    <div class="container glass">
+        <header>
+            <h1><i class="fa-solid fa-microphone-lines"></i> Dicta 2.0</h1>
+            <p>Habla en tu móvil, cópialo en tu PC</p>
+            <div class="lang-selector mobile-only">
+                <select id="langSelect" class="lang-select">
+                    <option value="es-ES" selected>🇪🇸 Español</option>
+                    <option value="en-US">🇬🇧 Inglés</option>
+                    <option value="fr-FR">🇫🇷 Francés</option>
+                    <option value="de-DE">🇩🇪 Alemán</option>
+                    <option value="it-IT">🇮🇹 Italiano</option>
+                </select>
+            </div>
+        </header>
+
+        <main>
+            <div class="controls">
+                <button id="micBtn" class="btn primary-btn">
+                    <span class="icon-pulse"></span>
+                    <i class="fa-solid fa-microphone"></i> 
+                    <span id="micBtnText">Empezar a Escuchar</span>
+                </button>
+            </div>
+
+            <!-- Header para desktop (arrastrable) -->
+            <div class="desktop-header">
+                <div class="drag-handle">
+                    <i class="fa-solid fa-grip-lines"></i>
+                </div>
+                <div class="actions">
+                    <div class="switch-container">
+                        <span class="switch-label">Autocopiar</span>
+                        <label class="switch">
+                            <input type="checkbox" id="autoCopySwitch" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <button id="settingsBtn" class="icon-btn" title="Ajustes">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+                    <button id="historyBtn" class="icon-btn" title="Historial">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </button>
+                    <button id="clearBtn" class="icon-btn" title="Limpiar texto">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                    <button id="copyBtn" class="icon-btn" title="Copiar al portapapeles">
+                        <i class="fa-regular fa-copy"></i>
+                    </button>
+                    <button id="closeBtn" class="icon-btn close-btn" title="Cerrar App">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="transcript-container">
+                <div class="transcript-header">
+                    <h2>Texto Transcrito</h2>
+                    <!-- Estos botones se usarán en el móvil, en desktop se ocultan -->
+                    <div class="actions mobile-actions">
+                        <button id="mobileClearBtn" class="btn secondary-btn" title="Limpiar texto">
+                            <i class="fa-solid fa-trash"></i> Limpiar
+                        </button>
+                        <button id="mobileCopyBtn" class="btn secondary-btn" title="Copiar al portapapeles">
+                            <i class="fa-regular fa-copy"></i> Copiar
+                        </button>
+                    </div>
+                </div>
+                <div class="transcript-box">
+                    <p id="interimText" class="interim-text"></p>
+                    <p id="finalText" class="final-text">Aquí aparecerá la transcripción en tiempo real...</p>
+                </div>
+            </div>
+            
+            <div class="bottom-bar">
+                <div id="statusIndicator" class="status-indicator">
+                    <div class="dot"></div>
+                    <span>Conectado al servidor</span>
+                </div>
+                <div id="mobileUrlDisplay" class="mobile-url-display hidden" title="Haz clic para copiar">
+                    <i class="fa-solid fa-mobile-screen"></i> <span></span>
+                </div>
+            </div>
+            
+            <div id="errorBox" class="error-box hidden">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span id="errorMsg"></span>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modales para Desktop -->
+    <div id="settingsModal" class="modal hidden">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-gear"></i> Ajustes</h3>
+                <button class="close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <strong>Escritura Directa (Auto-pegar)</strong>
+                        <p>Escribe automáticamente (Ctrl+V) tras autocopiar.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="autoPasteSwitch">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="setting-item qr-section">
+                    <button id="showQrBtn" class="btn secondary-btn" style="width: 100%;"><i class="fa-solid fa-qrcode"></i> Mostrar QR para emparejar móvil</button>
+                    <div id="qrContainer" class="hidden" style="text-align: center; margin-top: 15px; background: white; padding: 10px; border-radius: 8px;">
+                        <canvas id="qrcode"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="historyModal" class="modal hidden">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-clock-rotate-left"></i> Historial</h3>
+                <button class="close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="historyList" class="history-list">
+                    <!-- Historial se llena por JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

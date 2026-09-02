@@ -339,7 +339,7 @@ if (isDesktop) {
 
     settingsBtn.addEventListener('click', () => {
         const { ipcRenderer } = require('electron');
-        ipcRenderer.send('resize-window', { width: 400, height: 500 });
+        ipcRenderer.send('resize-window', { width: 420, height: 580 });
         settingsModal.classList.remove('hidden');
     });
 
