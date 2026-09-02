@@ -13,7 +13,7 @@
     <a href="#️-tecnologías-utilizadas">Tecnologías</a>
   </p>
   
-  <img src="foto-dicta.png" alt="Interfaz de Dicta" width="550" style="border-radius: 12px; margin-top: 20px;" />
+  <img src="foto-dicta-v2.png" alt="Interfaz de Dicta" width="550" style="border-radius: 12px; margin-top: 20px;" />
 </div>
 
 <br/>
