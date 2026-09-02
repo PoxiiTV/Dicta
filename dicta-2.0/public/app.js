@@ -185,7 +185,13 @@ async function copyText(btnElement) {
     if (!textToCopy || textToCopy === 'Aquí aparecerá la transcripción en tiempo real...') return;
     
     try {
-        await navigator.clipboard.writeText(textToCopy);
+        if (isDesktop) {
+            const { clipboard } = require('electron');
+            clipboard.writeText(textToCopy);
+        } else {
+            await navigator.clipboard.writeText(textToCopy);
+        }
+        
         const originalHtml = btnElement.innerHTML;
         btnElement.innerHTML = '<i class="fa-solid fa-check"></i>';
         btnElement.style.color = 'var(--success)';
