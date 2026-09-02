@@ -401,15 +401,23 @@ if (isDesktop) {
         });
     };
 
-    // Auto-paste intercept using Child Process
+    // Auto-paste intercept using Child Process and VBScript
     const { exec } = require('child_process');
+    const fs = require('fs');
+    const path = require('path');
+    const os = require('os');
+    
     window.doAutoPaste = function() {
         if (autoPasteSwitch.checked) {
-            const script = `
-                Add-Type -AssemblyName System.Windows.Forms
-                [System.Windows.Forms.SendKeys]::SendWait('^v')
-            `;
-            exec(`powershell -Command "${script}"`);
+            const vbsPath = path.join(os.tmpdir(), 'dicta_autopaste.vbs');
+            try {
+                fs.writeFileSync(vbsPath, 'Set WshShell = WScript.CreateObject("WScript.Shell")\nWshShell.SendKeys "^v"');
+                exec(`cscript //nologo "${vbsPath}"`, (err) => {
+                    if (err) console.error('Error autopasting:', err);
+                });
+            } catch (e) {
+                console.error('Error creating VBS:', e);
+            }
         }
     };
 }
