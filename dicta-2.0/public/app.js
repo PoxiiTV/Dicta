@@ -308,6 +308,15 @@ socket.on('server_info', (info) => {
                 }, 2000);
             } catch(e) {}
         };
+
+        // Generar QR automáticamente
+        const QRCode = require('qrcode');
+        const canvas = document.getElementById('qrcode');
+        if (canvas) {
+            QRCode.toCanvas(canvas, url, { width: 200, margin: 1 }, function (error) {
+                if (error) console.error('Error generando QR:', error);
+            });
+        }
     }
 });
 
@@ -318,7 +327,6 @@ if (isDesktop) {
     const historyBtn = document.getElementById('historyBtn');
     const settingsModal = document.getElementById('settingsModal');
     const historyModal = document.getElementById('historyModal');
-    const showQrBtn = document.getElementById('showQrBtn');
     const qrContainer = document.getElementById('qrContainer');
     const historyList = document.getElementById('historyList');
     const autoPasteSwitch = document.getElementById('autoPasteSwitch');
@@ -363,20 +371,7 @@ if (isDesktop) {
     autoCopySwitchDesktop.addEventListener('change', (e) => localStorage.setItem('autoCopy', e.target.checked));
     loadSettings();
 
-    // QR Code Logic
-    let qrcodeGenerated = false;
-    showQrBtn.addEventListener('click', () => {
-        if (!qrcodeGenerated && mobileUrlSpan && mobileUrlSpan.innerText) {
-            const QRCode = require('qrcode');
-            const canvas = document.getElementById('qrcode');
-            QRCode.toCanvas(canvas, mobileUrlSpan.innerText, { width: 200, margin: 1 }, function (error) {
-                if (error) console.error(error);
-                qrcodeGenerated = true;
-                qrContainer.classList.remove('hidden');
-                showQrBtn.style.display = 'none';
-            });
-        }
-    });
+
 
     // History Logic
     window.saveToHistory = (text) => {
