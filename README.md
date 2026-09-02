@@ -25,7 +25,8 @@
 ## ✨ Características
 
 - ⚡ **Tiempo Real**: Sincronización instantánea entre tu móvil y tu PC gracias a Socket.io.
-- 🤖 **Autocopiado Inteligente**: La aplicación detecta cuándo dejas de hablar (1 segundo de silencio) y copia automáticamente el texto a tu portapapeles sin perder el foco de tus otras aplicaciones (vía IPC nativo).
+- 🤖 **Modo Dictado Continuo**: Habla sin parar y sin interrupciones. Dicta no se cortará por silencios; puedes quedarte pensando el tiempo que necesites.
+- 🎯 **Stop & Copy**: Cuando terminas de dictar, pulsa Stop (en el móvil o desde el PC remoto) y, de forma automática, ¡se copiará todo el texto, se auto-pegará en tu documento y se limpiará la pantalla para el siguiente bloque!
 - ⌨️ **Escritura Directa (Auto-pegar)**: ¿Quieres que se escriba solo? Actívalo, y Dicta simulará `Ctrl+V` (usando automatización nativa VBScript) para soltar la transcripción en tu Word o Bloc de notas, ¡y se limpiará para la siguiente frase!
 - 📷 **Emparejamiento QR Mágico**: Olvídate de teclear IPs. Se genera un código QR automático en los Ajustes; solo tienes que apuntar con la cámara de tu móvil para conectarte.
 - 🌍 **Soporte Multi-idioma**: Reconoce español, inglés, francés y alemán. ¡Solo elige tu idioma y habla!
