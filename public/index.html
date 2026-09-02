@@ -18,8 +18,17 @@
     
     <div class="container glass">
         <header>
-            <h1><i class="fa-solid fa-microphone-lines"></i> Dicta</h1>
+            <h1><i class="fa-solid fa-microphone-lines"></i> Dicta 2.0</h1>
             <p>Habla en tu móvil, cópialo en tu PC</p>
+            <div class="lang-selector mobile-only">
+                <select id="langSelect" class="lang-select">
+                    <option value="es-ES" selected>🇪🇸 Español</option>
+                    <option value="en-US">🇬🇧 Inglés</option>
+                    <option value="fr-FR">🇫🇷 Francés</option>
+                    <option value="de-DE">🇩🇪 Alemán</option>
+                    <option value="it-IT">🇮🇹 Italiano</option>
+                </select>
+            </div>
         </header>
 
         <main>
@@ -33,17 +42,17 @@
 
             <!-- Header para desktop (arrastrable) -->
             <div class="desktop-header">
-                <div class="drag-handle">
-                    <i class="fa-solid fa-grip-lines"></i>
+                <div class="switch-container">
+                    <span class="switch-label">Autocopiar</span>
+                    <label class="switch">
+                        <input type="checkbox" id="autoCopySwitch" checked>
+                        <span class="slider round"></span>
+                    </label>
                 </div>
                 <div class="actions">
-                    <div class="switch-container">
-                        <span class="switch-label">Autocopiar</span>
-                        <label class="switch">
-                            <input type="checkbox" id="autoCopySwitch" checked>
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
+                    <button id="settingsBtn" class="icon-btn" title="Ajustes">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
                     <button id="clearBtn" class="icon-btn" title="Limpiar texto">
                         <i class="fa-solid fa-trash"></i>
                     </button>
@@ -78,7 +87,7 @@
             <div class="bottom-bar">
                 <div id="statusIndicator" class="status-indicator">
                     <div class="dot"></div>
-                    <span>Conectado al servidor</span>
+                    <span>Conectado</span>
                 </div>
                 <div id="mobileUrlDisplay" class="mobile-url-display hidden" title="Haz clic para copiar">
                     <i class="fa-solid fa-mobile-screen"></i> <span></span>
@@ -90,6 +99,49 @@
                 <span id="errorMsg"></span>
             </div>
         </main>
+    </div>
+
+    <!-- Modales para Desktop -->
+    <div id="settingsModal" class="modal hidden">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-gear"></i> Ajustes</h3>
+                <button class="close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <strong>Escritura Directa (Auto-pegar)</strong>
+                        <p>Escribe automáticamente (Ctrl+V) tras autocopiar.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="autoPasteSwitch">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="setting-item qr-section">
+                    <button id="historyBtn" class="btn secondary-btn" style="width: 100%; margin-bottom: 10px;"><i class="fa-solid fa-clock-rotate-left"></i> Ver Historial de Transcripciones</button>
+                    <div id="qrContainer" style="text-align: center; margin-top: 15px; background: white; padding: 10px; border-radius: 8px;">
+                        <canvas id="qrcode"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="historyModal" class="modal hidden">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-clock-rotate-left"></i> Historial</h3>
+                <button class="close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="historyList" class="history-list">
+                    <!-- Historial se llena por JS -->
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="app.js"></script>

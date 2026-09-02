@@ -36,6 +36,19 @@ ipcMain.on('close-window', () => {
     }
 });
 
+// Permitir redimensionar ventana
+ipcMain.on('resize-window', (event, { width, height }) => {
+    if (mainWindow) {
+        mainWindow.setSize(width, height);
+    }
+});
+
+// Copiar texto usando el proceso principal
+ipcMain.on('copy-text', (event, text) => {
+    const { clipboard } = require('electron');
+    clipboard.writeText(text);
+});
+
 // Arrancar el servidor Express localmente dentro del mismo proceso
 require('./server.js');
 

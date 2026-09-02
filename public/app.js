@@ -46,7 +46,8 @@ function initSpeechRecognition() {
     recognition = new window.SpeechRecognition();
     recognition.continuous = true; // Para que no se pare cuando hacemos pausas
     recognition.interimResults = true; // Para mostrar resultados parciales
-    recognition.lang = 'es-ES'; // Idioma por defecto (español)
+    const langSelect = document.getElementById('langSelect');
+    recognition.lang = langSelect ? langSelect.value : 'es-ES';
 
     recognition.onstart = () => {
         isRecording = true;
@@ -184,7 +185,13 @@ async function copyText(btnElement) {
     if (!textToCopy || textToCopy === 'Aquí aparecerá la transcripción en tiempo real...') return;
     
     try {
-        await navigator.clipboard.writeText(textToCopy);
+        if (isDesktop) {
+            const { ipcRenderer } = require('electron');
+            ipcRenderer.send('copy-text', textToCopy);
+        } else {
+            await navigator.clipboard.writeText(textToCopy);
+        }
+        
         const originalHtml = btnElement.innerHTML;
         btnElement.innerHTML = '<i class="fa-solid fa-check"></i>';
         btnElement.style.color = 'var(--success)';
@@ -195,7 +202,7 @@ async function copyText(btnElement) {
         }, 2000);
     } catch (err) {
         console.error('Error al copiar: ', err);
-        showError('No se pudo copiar el texto.');
+        showError('No se pudo copiar el texto: ' + err.message);
     }
 }
 copyBtn.addEventListener('click', () => copyText(copyBtn));
@@ -223,12 +230,12 @@ function hideError() {
 // Eventos de Socket.IO
 socket.on('connect', () => {
     statusIndicator.classList.remove('disconnected');
-    statusText.innerText = 'Conectado al servidor';
+    statusText.innerText = 'Conectado';
 });
 
 socket.on('disconnect', () => {
     statusIndicator.classList.add('disconnected');
-    statusText.innerText = 'Desconectado del servidor';
+    statusText.innerText = 'Desconectado';
     if (isRecording) stopRecording();
 });
 
@@ -248,17 +255,22 @@ socket.on('transcription_update', (data) => {
         finalTranscript = data.text;
         finalTextEl.innerText = finalTranscript;
         interimTextEl.innerText = '';
+        if (isDesktop && window.saveToHistory) window.saveToHistory(finalTranscript);
     } else if (data.type === 'interim') {
         finalTextEl.innerText = data.fullText;
         interimTextEl.innerText = data.text;
     }
 
     // Lógica de Autocopiar
-    if (isDesktop && autoCopySwitch && autoCopySwitch.checked) {
+    const autoCopySwitchDesktop = document.getElementById('autoCopySwitch');
+    if (isDesktop && autoCopySwitchDesktop && autoCopySwitchDesktop.checked) {
         clearTimeout(autoCopyTimer);
-        autoCopyTimer = setTimeout(() => {
+        autoCopyTimer = setTimeout(async () => {
             if (finalTextEl.innerText && finalTextEl.innerText !== 'Aquí aparecerá la transcripción en tiempo real...') {
-                copyText(copyBtn);
+                await copyText(copyBtn);
+                if (window.doAutoPaste) window.doAutoPaste();
+                // Limpiar texto para que el próximo dictado sea nuevo y no se repita al pegar
+                if (typeof clearText === 'function') clearText();
             }
         }, 1000);
     }
@@ -304,5 +316,116 @@ socket.on('server_info', (info) => {
                 }, 2000);
             } catch(e) {}
         };
+
+        // Generar QR automáticamente
+        const QRCode = require('qrcode');
+        const canvas = document.getElementById('qrcode');
+        if (canvas) {
+            QRCode.toCanvas(canvas, url, { width: 200, margin: 1 }, function (error) {
+                if (error) console.error('Error generando QR:', error);
+            });
+        }
     }
 });
+
+// === DICTA 2.0 FEATURES ===
+
+if (isDesktop) {
+    const settingsBtn = document.getElementById('settingsBtn');
+    const historyBtn = document.getElementById('historyBtn');
+    const settingsModal = document.getElementById('settingsModal');
+    const historyModal = document.getElementById('historyModal');
+    const qrContainer = document.getElementById('qrContainer');
+    const historyList = document.getElementById('historyList');
+    const autoPasteSwitch = document.getElementById('autoPasteSwitch');
+    const autoCopySwitchDesktop = document.getElementById('autoCopySwitch');
+
+    // Modal Logic
+    const closeModals = () => {
+        const wasHidden = settingsModal.classList.contains('hidden') && historyModal.classList.contains('hidden');
+        settingsModal.classList.add('hidden');
+        historyModal.classList.add('hidden');
+        if (!wasHidden) {
+            const { ipcRenderer } = require('electron');
+            ipcRenderer.send('resize-window', { width: 320, height: 250 });
+        }
+    };
+
+    document.querySelectorAll('.close-modal').forEach(btn => btn.addEventListener('click', closeModals));
+
+    settingsBtn.addEventListener('click', () => {
+        const { ipcRenderer } = require('electron');
+        ipcRenderer.send('resize-window', { width: 420, height: 580 });
+        settingsModal.classList.remove('hidden');
+    });
+
+    historyBtn.addEventListener('click', () => {
+        const { ipcRenderer } = require('electron');
+        ipcRenderer.send('resize-window', { width: 400, height: 450 });
+        settingsModal.classList.add('hidden');
+        historyModal.classList.remove('hidden');
+        renderHistory();
+    });
+
+    // Settings logic (LocalStorage)
+    const loadSettings = () => {
+        const paste = localStorage.getItem('autoPaste');
+        if (paste === 'true') autoPasteSwitch.checked = true;
+        const copy = localStorage.getItem('autoCopy');
+        if (copy === 'false') autoCopySwitchDesktop.checked = false;
+    };
+    
+    autoPasteSwitch.addEventListener('change', (e) => localStorage.setItem('autoPaste', e.target.checked));
+    autoCopySwitchDesktop.addEventListener('change', (e) => localStorage.setItem('autoCopy', e.target.checked));
+    loadSettings();
+
+
+
+    // History Logic
+    window.saveToHistory = (text) => {
+        if (!text || text.trim() === '' || text === 'Aquí aparecerá la transcripción en tiempo real...') return;
+        let history = JSON.parse(localStorage.getItem('dictaHistory') || '[]');
+        if (history.length === 0 || history[0] !== text) {
+            history.unshift(text);
+            if (history.length > 10) history.pop();
+            localStorage.setItem('dictaHistory', JSON.stringify(history));
+        }
+    };
+
+    const renderHistory = () => {
+        let history = JSON.parse(localStorage.getItem('dictaHistory') || '[]');
+        if (history.length === 0) {
+            historyList.innerHTML = '<p style="color: var(--text-muted); text-align: center;">No hay historial todavía.</p>';
+            return;
+        }
+        historyList.innerHTML = history.map(t => `<div class="history-item">${t}</div>`).join('');
+        document.querySelectorAll('.history-item').forEach(item => {
+            item.addEventListener('click', () => {
+                navigator.clipboard.writeText(item.innerText).then(() => {
+                    item.style.borderColor = 'var(--success)';
+                    setTimeout(() => item.style.borderColor = 'transparent', 1000);
+                });
+            });
+        });
+    };
+
+    // Auto-paste intercept using Child Process and VBScript
+    const { exec } = require('child_process');
+    const fs = require('fs');
+    const path = require('path');
+    const os = require('os');
+    
+    window.doAutoPaste = function() {
+        if (autoPasteSwitch.checked) {
+            const vbsPath = path.join(os.tmpdir(), 'dicta_autopaste.vbs');
+            try {
+                fs.writeFileSync(vbsPath, 'Set WshShell = WScript.CreateObject("WScript.Shell")\nWshShell.SendKeys "^v"');
+                exec(`cscript //nologo "${vbsPath}"`, (err) => {
+                    if (err) console.error('Error autopasting:', err);
+                });
+            } catch (e) {
+                console.error('Error creating VBS:', e);
+            }
+        }
+    };
+}

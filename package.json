@@ -1,6 +1,6 @@
 {
   "name": "dicta",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "App para transcribir voz de movil a PC local",
   "main": "main.js",
   "scripts": {
@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "express": "^4.19.2",
+    "qrcode": "^1.5.4",
     "selfsigned": "^2.4.1",
     "socket.io": "^4.7.5"
   },
