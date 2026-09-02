@@ -42,19 +42,16 @@
 
             <!-- Header para desktop (arrastrable) -->
             <div class="desktop-header">
+                <div class="switch-container">
+                    <span class="switch-label">Autocopiar</span>
+                    <label class="switch">
+                        <input type="checkbox" id="autoCopySwitch" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
                 <div class="actions">
-                    <div class="switch-container">
-                        <span class="switch-label">Autocopiar</span>
-                        <label class="switch">
-                            <input type="checkbox" id="autoCopySwitch" checked>
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
                     <button id="settingsBtn" class="icon-btn" title="Ajustes">
                         <i class="fa-solid fa-gear"></i>
-                    </button>
-                    <button id="historyBtn" class="icon-btn" title="Historial">
-                        <i class="fa-solid fa-clock-rotate-left"></i>
                     </button>
                     <button id="clearBtn" class="icon-btn" title="Limpiar texto">
                         <i class="fa-solid fa-trash"></i>
@@ -124,6 +121,7 @@
                     </label>
                 </div>
                 <div class="setting-item qr-section">
+                    <button id="historyBtn" class="btn secondary-btn" style="width: 100%; margin-bottom: 10px;"><i class="fa-solid fa-clock-rotate-left"></i> Ver Historial de Transcripciones</button>
                     <button id="showQrBtn" class="btn secondary-btn" style="width: 100%;"><i class="fa-solid fa-qrcode"></i> Mostrar QR para emparejar móvil</button>
                     <div id="qrContainer" class="hidden" style="text-align: center; margin-top: 15px; background: white; padding: 10px; border-radius: 8px;">
                         <canvas id="qrcode"></canvas>

@@ -346,6 +346,7 @@ if (isDesktop) {
     historyBtn.addEventListener('click', () => {
         const { ipcRenderer } = require('electron');
         ipcRenderer.send('resize-window', { width: 400, height: 450 });
+        settingsModal.classList.add('hidden');
         historyModal.classList.remove('hidden');
         renderHistory();
     });
