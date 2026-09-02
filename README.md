@@ -1,10 +1,10 @@
 <div align="center">
   <img src="icon.png" alt="Dicta Logo" width="120" style="margin-bottom: 20px;" />
   
-  <h1>🎙️ Dicta</h1>
+  <h1>🎙️ Dicta 2.0</h1>
   
   <p>
-    <b>Transcribe tu voz en el móvil y cópiala en tu PC en tiempo real.</b>
+    <b>Transcribe tu voz en el móvil y escríbela mágicamente en tu PC local.</b>
   </p>
 
   <p>
@@ -18,17 +18,19 @@
 
 <br/>
 
-> **Dicta** es una aplicación dual (Web y Escritorio) que te permite utilizar el micrófono de tu teléfono móvil para dictar texto y verlo aparecer al instante en la pantalla de tu ordenador. Olvídate de mandarte mensajes a ti mismo para pasar texto. Simplemente abre Dicta en tu PC, conéctate desde tu móvil, ¡y empieza a hablar!
+> **Dicta 2.0** es una aplicación dual (Web y Escritorio) que te permite utilizar el micrófono de tu teléfono móvil para dictar texto y verlo aparecer al instante en tu ordenador, ¡o incluso que se escriba de forma automática en tu documento Word/Notepad!
 
 ---
 
-## ✨ Características
+## ✨ Características de la versión 2.0
 
 - ⚡ **Tiempo Real**: Sincronización instantánea entre tu móvil y tu PC gracias a Socket.io.
-- 🤖 **Autocopiado Inteligente**: La aplicación detecta cuándo dejas de hablar (1 segundo de silencio) y copia automáticamente el texto a tu portapapeles sin que toques nada.
-- 🌐 **Enlace Dinámico Directo**: Tu PC detectará su IP local y te la mostrará cómodamente en pantalla para que sepas qué URL exacta introducir en el móvil con un solo clic.
-- 📱 **Interfaz Web Premium**: Un diseño *Glassmorphism* moderno y elegante en el navegador.
-- 💻 **Widget Flotante (PC)**: El cliente de Windows funciona como un pequeño widget transparente y arrastrable "siempre por encima" que no molesta en tu pantalla.
+- 🤖 **Autocopiado Inteligente**: La aplicación detecta cuándo dejas de hablar (1 segundo de silencio) y copia automáticamente el texto a tu portapapeles sin perder el foco de tus otras aplicaciones (vía IPC nativo).
+- ⌨️ **Escritura Directa (Auto-pegar)**: ¿Quieres que se escriba solo? Actívalo, y Dicta simulará `Ctrl+V` (usando automatización nativa VBScript) para soltar la transcripción en tu Word o Bloc de notas, ¡y se limpiará para la siguiente frase!
+- 📷 **Emparejamiento QR Mágico**: Olvídate de teclear IPs. Se genera un código QR automático en los Ajustes; solo tienes que apuntar con la cámara de tu móvil para conectarte.
+- 🌍 **Soporte Multi-idioma**: Reconoce español, inglés, francés y alemán. ¡Solo elige tu idioma y habla!
+- 🕰️ **Historial de Transcripciones**: Guarda tus últimos 10 dictados para que nunca pierdas información importante, incluso si se limpia la pantalla.
+- 💻 **Widget Flotante (PC)**: El cliente de Windows funciona como un pequeño widget transparente y arrastrable "siempre por encima" con diseño *Glassmorphism* oscuro.
 - 🔒 **Certificados SSL Automáticos**: Generación de HTTPS al vuelo para que iOS y Android te permitan usar el micrófono de forma segura.
 
 ---
@@ -36,15 +38,15 @@
 ## 🚀 Uso Rápido
 
 ### 💻 En tu PC (Windows)
-Descarga la aplicación portable o ejecuta el código fuente. Se abrirá un pequeño widget transparente.
-- Si usas el código fuente: Ejecuta `npm start` (o `start.bat`).
+Descarga la aplicación portable (el archivo `.exe`) de la pestaña Releases, ¡no necesita instalación! Se abrirá un pequeño widget transparente.
 
 ### 📱 En tu Móvil
 1. Asegúrate de estar en la misma red Wi-Fi que el ordenador.
-2. Abre en tu móvil la **URL exacta** que aparece en la esquina inferior izquierda del widget de PC (ej. `https://192.168.1.33:3000`). ¡Puedes hacer clic en ella para copiarla!
-3. *(Nota: Te saldrá un aviso de que la conexión no es privada. Haz clic en Avanzado -> Continuar).*
-4. Dale al botón de **Empezar a Escuchar** y permite el acceso al micrófono.
-5. ¡Empieza a hablar y verás el texto en tu PC copiándose mágicamente!
+2. Abre los **Ajustes** en el PC (el icono del engranaje).
+3. Apunta con la cámara de tu móvil al **Código QR** que aparece.
+4. *(Nota: Te saldrá un aviso de que la conexión no es privada. Haz clic en Avanzado -> Continuar).*
+5. Elige tu idioma, dale al botón de **Empezar a Escuchar** y permite el acceso al micrófono.
+6. ¡Empieza a hablar y verás el texto escribiéndose en tu PC!
 
 ---
 
