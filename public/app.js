@@ -11,6 +11,7 @@ const finalTextEl = document.getElementById('finalText');
 const copyBtn = document.getElementById('copyBtn');
 const clearBtn = document.getElementById('clearBtn');
 const closeBtn = document.getElementById('closeBtn');
+const remoteMicBtn = document.getElementById('remoteMicBtn');
 
 // Mobile buttons
 const mobileCopyBtn = document.getElementById('mobileCopyBtn');
@@ -25,6 +26,7 @@ const errorMsg = document.getElementById('errorMsg');
 const isDesktop = new URLSearchParams(window.location.search).get('isDesktop') === '1';
 if (isDesktop) {
     document.body.classList.add('desktop-mode');
+    if (remoteMicBtn) remoteMicBtn.classList.remove('hidden');
 }
 
 // Estado
@@ -247,7 +249,6 @@ socket.on('clear_text', () => {
 });
 
 // Recibir transcripciones (para el PC)
-let autoCopyTimer = null;
 const autoCopySwitch = document.getElementById('autoCopySwitch');
 
 socket.on('transcription_update', (data) => {
@@ -260,33 +261,52 @@ socket.on('transcription_update', (data) => {
         finalTextEl.innerText = data.fullText;
         interimTextEl.innerText = data.text;
     }
-
-    // Lógica de Autocopiar
-    const autoCopySwitchDesktop = document.getElementById('autoCopySwitch');
-    if (isDesktop && autoCopySwitchDesktop && autoCopySwitchDesktop.checked) {
-        clearTimeout(autoCopyTimer);
-        autoCopyTimer = setTimeout(async () => {
-            if (finalTextEl.innerText && finalTextEl.innerText !== 'Aquí aparecerá la transcripción en tiempo real...') {
-                await copyText(copyBtn);
-                if (window.doAutoPaste) window.doAutoPaste();
-                // Limpiar texto para que el próximo dictado sea nuevo y no se repita al pegar
-                if (typeof clearText === 'function') clearText();
-            }
-        }, 1000);
-    }
 });
 
 // Recibir estado de grabación
-socket.on('recording_status_update', (remoteIsRecording) => {
+socket.on('recording_status_update', async (remoteIsRecording) => {
     if (remoteIsRecording) {
         micBtn.classList.add('recording');
         micBtnText.innerText = 'Escuchando desde otro...';
         micBtn.disabled = true;
+        if (remoteMicBtn) {
+            remoteMicBtn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+            remoteMicBtn.classList.add('recording-active');
+        }
     } else {
         micBtn.classList.remove('recording');
         micBtnText.innerText = 'Empezar a Escuchar';
         micBtn.disabled = false;
-        interimTextEl.innerText = '';
+        if (remoteMicBtn) {
+            remoteMicBtn.innerHTML = '<i class="fa-solid fa-microphone-slash"></i>';
+            remoteMicBtn.classList.remove('recording-active');
+        }
+
+        // Lógica de Autocopiar al detenerse
+        const autoCopySwitchDesktop = document.getElementById('autoCopySwitch');
+        if (isDesktop && autoCopySwitchDesktop && autoCopySwitchDesktop.checked) {
+            if (finalTextEl.innerText && finalTextEl.innerText !== 'Aquí aparecerá la transcripción en tiempo real...') {
+                await copyText(copyBtn);
+                if (window.doAutoPaste) window.doAutoPaste();
+                if (typeof clearText === 'function') clearText();
+            }
+        }
+    }
+});
+
+// Evento para el botón de micrófono remoto
+if (remoteMicBtn) {
+    remoteMicBtn.addEventListener('click', () => {
+        socket.emit('toggle_recording');
+    });
+}
+
+// Recibir orden de toggle recording
+socket.on('toggle_recording', () => {
+    if (isRecording) {
+        stopRecording();
+    } else {
+        startRecording();
     }
 });
 

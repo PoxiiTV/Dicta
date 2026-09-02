@@ -46,6 +46,11 @@ io.on('connection', (socket) => {
         socket.broadcast.emit('recording_status_update', isRecording);
     });
 
+    // Alternar grabación desde el PC
+    socket.on('toggle_recording', () => {
+        socket.broadcast.emit('toggle_recording');
+    });
+
     // Limpiar texto
     socket.on('clear_text', () => {
         socket.broadcast.emit('clear_text');

@@ -59,7 +59,11 @@ body.desktop-mode .drag-handle {
 body.desktop-mode .actions {
     display: flex;
     gap: 8px;
-    -webkit-app-region: no-drag; /* Los botones no deben arrastrar */
+    -webkit-app-region: no-drag; /* Los botones deben poderse hacer clic */
+}
+
+body.desktop-mode .recording-active {
+    color: var(--danger) !important;
 }
 
 body.desktop-mode .icon-btn {
