@@ -186,8 +186,8 @@ async function copyText(btnElement) {
     
     try {
         if (isDesktop) {
-            const { clipboard } = require('electron');
-            clipboard.writeText(textToCopy);
+            const { ipcRenderer } = require('electron');
+            ipcRenderer.send('copy-text', textToCopy);
         } else {
             await navigator.clipboard.writeText(textToCopy);
         }
@@ -202,7 +202,7 @@ async function copyText(btnElement) {
         }, 2000);
     } catch (err) {
         console.error('Error al copiar: ', err);
-        showError('No se pudo copiar el texto.');
+        showError('No se pudo copiar el texto: ' + err.message);
     }
 }
 copyBtn.addEventListener('click', () => copyText(copyBtn));
@@ -269,6 +269,8 @@ socket.on('transcription_update', (data) => {
             if (finalTextEl.innerText && finalTextEl.innerText !== 'Aquí aparecerá la transcripción en tiempo real...') {
                 await copyText(copyBtn);
                 if (window.doAutoPaste) window.doAutoPaste();
+                // Limpiar texto para que el próximo dictado sea nuevo y no se repita al pegar
+                if (typeof clearText === 'function') clearText();
             }
         }, 1000);
     }
