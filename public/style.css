@@ -282,10 +282,18 @@ main {
 
 /* Responsive */
 @media (max-width: 600px) {
+    body {
+        align-items: flex-start;
+        padding-top: 1rem;
+    }
+    
     .container {
-        width: 95%;
-        padding: 1.5rem;
-        border-radius: 20px;
+        width: 100%;
+        max-width: none;
+        padding: 1.5rem 1rem;
+        border-radius: 16px;
+        box-shadow: none;
+        border: none;
     }
     
     header h1 {
