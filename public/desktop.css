@@ -93,8 +93,10 @@ body.desktop-mode .transcript-container {
 
 body.desktop-mode .transcript-box {
     padding: 1rem;
-    max-height: calc(100vh - 70px);
     font-size: 1rem; /* Más pequeño para desktop */
+    min-height: 0;
+    max-height: none;
+    flex: 1;
 }
 
 body.desktop-mode .status-indicator {
