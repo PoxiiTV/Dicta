@@ -417,14 +417,25 @@ if (isDesktop) {
     
     window.doAutoPaste = function() {
         if (autoPasteSwitch.checked) {
-            const vbsPath = path.join(os.tmpdir(), 'dicta_autopaste.vbs');
-            try {
-                fs.writeFileSync(vbsPath, 'Set WshShell = WScript.CreateObject("WScript.Shell")\nWshShell.SendKeys "^v"');
-                exec(`cscript //nologo "${vbsPath}"`, (err) => {
-                    if (err) console.error('Error autopasting:', err);
+            const platform = os.platform();
+            if (platform === 'win32') {
+                const vbsPath = path.join(os.tmpdir(), 'dicta_autopaste.vbs');
+                try {
+                    fs.writeFileSync(vbsPath, 'Set WshShell = WScript.CreateObject("WScript.Shell")\nWshShell.SendKeys "^v"');
+                    exec(`cscript //nologo "${vbsPath}"`, (err) => {
+                        if (err) console.error('Error autopasting Windows:', err);
+                    });
+                } catch (e) {
+                    console.error('Error creating VBS:', e);
+                }
+            } else if (platform === 'darwin') {
+                exec(`osascript -e 'tell application "System Events" to keystroke "v" using command down'`, (err) => {
+                    if (err) console.error('Error autopasting Mac:', err);
                 });
-            } catch (e) {
-                console.error('Error creating VBS:', e);
+            } else if (platform === 'linux') {
+                exec(`xdotool key ctrl+v`, (err) => {
+                    if (err) console.error('Error autopasting Linux:', err);
+                });
             }
         }
     };
