@@ -48,6 +48,20 @@ Descarga la aplicación portable o ejecuta el código fuente. Se abrirá un pequ
 
 ---
 
+## 🧠 ¿Cómo funciona la transcripción?
+
+¡La magia ocurre sin instalar pesadas inteligencias artificiales en tu PC! 
+
+Dicta aprovecha la **Web Speech API** integrada de forma nativa en los navegadores modernos (como Safari, Chrome o Edge). Cuando hablas por tu móvil:
+1. **Reconocimiento Nativo**: El navegador de tu teléfono procesa el audio utilizando los motores de reconocimiento de voz de Apple o Google (altamente precisos y rápidos).
+2. **Eventos en Vivo**: A medida que hablas, el navegador nos va enviando el texto parcial (interim) y final.
+3. **Sincronización Ultrarrápida**: Capturamos ese texto con JavaScript y lo enviamos a través de **WebSockets** (`Socket.io`) a tu servidor local.
+4. **Pantalla del PC**: El widget de Windows recibe el texto en milisegundos y te lo muestra en pantalla, listo para copiar.
+
+Todo el tráfico es local y seguro (gracias a los certificados HTTPS autogenerados), haciendo que la latencia sea prácticamente cero.
+
+---
+
 ## 🛠️ Tecnologías Utilizadas
 
 - **Frontend**: HTML5, CSS3 Vanilla, JavaScript (Web Speech API).
