@@ -2,6 +2,8 @@
   <img src="icon.png" alt="Dicta Logo" width="120" />
   <h1>🎙️ Dicta</h1>
   <p>Transcribe tu voz en el móvil y cópiala en tu PC en tiempo real.</p>
+  <br />
+  <img src="foto-dicta.png" alt="Interfaz de Dicta" width="400" style="border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);" />
 </div>
 
 ---
