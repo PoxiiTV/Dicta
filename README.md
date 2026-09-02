@@ -1,7 +1,7 @@
 <div align="center">
   <img src="icon.png" alt="Dicta Logo" width="120" style="margin-bottom: 20px;" />
   
-  <h1>🎙️ Dicta 2.0</h1>
+  <h1>🎙️ Dicta</h1>
   
   <p>
     <b>Transcribe tu voz en el móvil y escríbela mágicamente en tu PC local.</b>
@@ -18,11 +18,11 @@
 
 <br/>
 
-> **Dicta 2.0** es una aplicación dual (Web y Escritorio) que te permite utilizar el micrófono de tu teléfono móvil para dictar texto y verlo aparecer al instante en tu ordenador, ¡o incluso que se escriba de forma automática en tu documento Word/Notepad!
+> **Dicta** es una aplicación dual (Web y Escritorio) que te permite utilizar el micrófono de tu teléfono móvil para dictar texto y verlo aparecer al instante en tu ordenador, ¡o incluso que se escriba de forma automática en tu documento Word/Notepad!
 
 ---
 
-## ✨ Características de la versión 2.0
+## ✨ Características
 
 - ⚡ **Tiempo Real**: Sincronización instantánea entre tu móvil y tu PC gracias a Socket.io.
 - 🤖 **Autocopiado Inteligente**: La aplicación detecta cuándo dejas de hablar (1 segundo de silencio) y copia automáticamente el texto a tu portapapeles sin perder el foco de tus otras aplicaciones (vía IPC nativo).
