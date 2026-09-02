@@ -224,12 +224,12 @@ function hideError() {
 // Eventos de Socket.IO
 socket.on('connect', () => {
     statusIndicator.classList.remove('disconnected');
-    statusText.innerText = 'Conectado al servidor';
+    statusText.innerText = 'Conectado';
 });
 
 socket.on('disconnect', () => {
     statusIndicator.classList.add('disconnected');
-    statusText.innerText = 'Desconectado del servidor';
+    statusText.innerText = 'Desconectado';
     if (isRecording) stopRecording();
 });
 
