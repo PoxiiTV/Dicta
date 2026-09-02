@@ -29,6 +29,12 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
     console.log('Un cliente se ha conectado:', socket.id);
 
+    // Enviar IP al cliente recién conectado
+    socket.emit('server_info', {
+        ips: IPs,
+        port: PORT
+    });
+
     // Cuando el móvil envía una transcripción
     socket.on('transcription', (data) => {
         // Retransmitir a todos los demás clientes conectados

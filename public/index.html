@@ -7,6 +7,7 @@
     <!-- Usaremos tipografía moderna -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="extra.css">
     <link rel="stylesheet" href="desktop.css">
     <!-- Carga de socket.io del servidor -->
     <script src="/socket.io/socket.io.js"></script>
@@ -36,6 +37,13 @@
                     <i class="fa-solid fa-grip-lines"></i>
                 </div>
                 <div class="actions">
+                    <div class="switch-container">
+                        <span class="switch-label">Autocopiar</span>
+                        <label class="switch">
+                            <input type="checkbox" id="autoCopySwitch" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
                     <button id="clearBtn" class="icon-btn" title="Limpiar texto">
                         <i class="fa-solid fa-trash"></i>
                     </button>
@@ -67,9 +75,14 @@
                 </div>
             </div>
             
-            <div id="statusIndicator" class="status-indicator">
-                <div class="dot"></div>
-                <span>Conectado al servidor</span>
+            <div class="bottom-bar">
+                <div id="statusIndicator" class="status-indicator">
+                    <div class="dot"></div>
+                    <span>Conectado al servidor</span>
+                </div>
+                <div id="mobileUrlDisplay" class="mobile-url-display hidden" title="Haz clic para copiar">
+                    <i class="fa-solid fa-mobile-screen"></i> <span></span>
+                </div>
             </div>
             
             <div id="errorBox" class="error-box hidden">

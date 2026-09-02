@@ -240,6 +240,9 @@ socket.on('clear_text', () => {
 });
 
 // Recibir transcripciones (para el PC)
+let autoCopyTimer = null;
+const autoCopySwitch = document.getElementById('autoCopySwitch');
+
 socket.on('transcription_update', (data) => {
     if (data.type === 'final') {
         finalTranscript = data.text;
@@ -249,19 +252,57 @@ socket.on('transcription_update', (data) => {
         finalTextEl.innerText = data.fullText;
         interimTextEl.innerText = data.text;
     }
+
+    // Lógica de Autocopiar
+    if (isDesktop && autoCopySwitch && autoCopySwitch.checked) {
+        clearTimeout(autoCopyTimer);
+        autoCopyTimer = setTimeout(() => {
+            if (finalTextEl.innerText && finalTextEl.innerText !== 'Aquí aparecerá la transcripción en tiempo real...') {
+                copyText(copyBtn);
+            }
+        }, 1000);
+    }
 });
 
 // Recibir estado de grabación
 socket.on('recording_status_update', (remoteIsRecording) => {
     if (remoteIsRecording) {
-        // Alguien más está grabando, mostrar indicativo
         micBtn.classList.add('recording');
-        micBtnText.innerText = 'Escuchando desde otro dispositivo...';
+        micBtnText.innerText = 'Escuchando desde otro...';
         micBtn.disabled = true;
     } else {
         micBtn.classList.remove('recording');
         micBtnText.innerText = 'Empezar a Escuchar';
         micBtn.disabled = false;
         interimTextEl.innerText = '';
+    }
+});
+
+// Recibir IP del servidor
+const mobileUrlDisplay = document.getElementById('mobileUrlDisplay');
+const mobileUrlSpan = mobileUrlDisplay ? mobileUrlDisplay.querySelector('span') : null;
+
+socket.on('server_info', (info) => {
+    if (isDesktop && mobileUrlDisplay && mobileUrlSpan) {
+        // Encontrar una IP preferible, normalmente la que no empiece por 127 o VirtualBox (172)
+        let bestIp = info.ips[0];
+        const normalIp = info.ips.find(ip => ip.startsWith('192.168.1.'));
+        if (normalIp) bestIp = normalIp;
+
+        const url = `https://${bestIp}:${info.port}`;
+        mobileUrlSpan.innerText = url;
+        mobileUrlDisplay.classList.remove('hidden');
+
+        // Permitir copiar la URL al hacer clic
+        mobileUrlDisplay.onclick = async () => {
+            try {
+                await navigator.clipboard.writeText(url);
+                const originalHtml = mobileUrlDisplay.innerHTML;
+                mobileUrlDisplay.innerHTML = '<i class="fa-solid fa-check"></i> <span>Copiado!</span>';
+                setTimeout(() => {
+                    mobileUrlDisplay.innerHTML = originalHtml;
+                }, 2000);
+            } catch(e) {}
+        };
     }
 });
