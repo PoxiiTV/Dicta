@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dicta</title>
+    <!-- Usaremos tipografía moderna -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="desktop.css">
+    <!-- Carga de socket.io del servidor -->
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-anim"></div>
+    
+    <div class="container glass">
+        <header>
+            <h1><i class="fa-solid fa-microphone-lines"></i> Dicta</h1>
+            <p>Habla en tu móvil, cópialo en tu PC</p>
+        </header>
+
+        <main>
+            <div class="controls">
+                <button id="micBtn" class="btn primary-btn">
+                    <span class="icon-pulse"></span>
+                    <i class="fa-solid fa-microphone"></i> 
+                    <span id="micBtnText">Empezar a Escuchar</span>
+                </button>
+            </div>
+
+            <!-- Header para desktop (arrastrable) -->
+            <div class="desktop-header">
+                <div class="drag-handle">
+                    <i class="fa-solid fa-grip-lines"></i>
+                </div>
+                <div class="actions">
+                    <button id="clearBtn" class="icon-btn" title="Limpiar texto">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                    <button id="copyBtn" class="icon-btn" title="Copiar al portapapeles">
+                        <i class="fa-regular fa-copy"></i>
+                    </button>
+                    <button id="closeBtn" class="icon-btn close-btn" title="Cerrar App">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="transcript-container">
+                <div class="transcript-header">
+                    <h2>Texto Transcrito</h2>
+                    <!-- Estos botones se usarán en el móvil, en desktop se ocultan -->
+                    <div class="actions mobile-actions">
+                        <button id="mobileClearBtn" class="btn secondary-btn" title="Limpiar texto">
+                            <i class="fa-solid fa-trash"></i> Limpiar
+                        </button>
+                        <button id="mobileCopyBtn" class="btn secondary-btn" title="Copiar al portapapeles">
+                            <i class="fa-regular fa-copy"></i> Copiar
+                        </button>
+                    </div>
+                </div>
+                <div class="transcript-box">
+                    <p id="interimText" class="interim-text"></p>
+                    <p id="finalText" class="final-text">Aquí aparecerá la transcripción en tiempo real...</p>
+                </div>
+            </div>
+            
+            <div id="statusIndicator" class="status-indicator">
+                <div class="dot"></div>
+                <span>Conectado al servidor</span>
+            </div>
+            
+            <div id="errorBox" class="error-box hidden">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span id="errorMsg"></span>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

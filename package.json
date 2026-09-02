@@ -1,0 +1,32 @@
+{
+  "name": "dicta",
+  "version": "1.0.0",
+  "description": "App para transcribir voz de movil a PC local",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "node server.js",
+    "build": "electron-builder -w"
+  },
+  "build": {
+    "appId": "com.dicta.app",
+    "productName": "Dicta",
+    "icon": "icon.png",
+    "win": {
+      "target": "portable",
+      "icon": "icon.png"
+    },
+    "directories": {
+      "output": "dist"
+    }
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "selfsigned": "^2.4.1",
+    "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "electron": "^44.1.1",
+    "electron-builder": "^26.15.3"
+  }
+}
