@@ -15,10 +15,12 @@ Olvídate de mandarte mensajes a ti mismo para pasar texto. Simplemente abre Dic
 ## ✨ Características
 
 - **⚡ Tiempo Real**: Sincronización instantánea entre tu móvil y tu PC gracias a Socket.io.
+- **🤖 Autocopiado Inteligente**: La aplicación detecta cuándo dejas de hablar (1 segundo de silencio) y copia automáticamente el texto a tu portapapeles sin que toques nada.
+- **🌐 Enlace Dinámico Directo**: Tu PC detectará su IP local y te la mostrará cómodamente en pantalla para que sepas qué URL exacta introducir en el móvil con un solo clic.
 - **📱 Interfaz Web Premium**: Un diseño *Glassmorphism* moderno y elegante en el navegador.
 - **💻 Widget Flotante (PC)**: El cliente de Windows funciona como un pequeño widget transparente y arrastrable "siempre por encima" que no molesta en tu pantalla.
 - **🔒 Certificados SSL Automáticos**: Generación de HTTPS al vuelo para que iOS y Android te permitan usar el micrófono de forma segura.
-- **📋 Copia Rápida**: Un solo clic para copiar todo el texto transcrito.
+- **📋 Copia Rápida**: Un solo clic para copiar todo el texto transcrito si decides hacerlo manual.
 
 ## 🚀 Uso Rápido
 
@@ -28,10 +30,10 @@ Descarga la aplicación portable o ejecuta el código fuente. Se abrirá un pequ
 
 ### En tu Móvil
 1. Asegúrate de estar en la misma red Wi-Fi que el ordenador.
-2. Abre la URL que se indica en la consola (ej. `https://192.168.1.33:3000`).
+2. Abre en tu móvil la URL exacta que aparece en la esquina inferior izquierda del widget de PC (ej. `https://192.168.1.33:3000`). ¡Puedes hacer clic en ella para copiarla!
 3. (Nota: Te saldrá un aviso de que la conexión no es privada. Haz clic en Avanzado -> Continuar).
 4. Dale al botón de **Empezar a Escuchar** y permite el acceso al micrófono.
-5. ¡Empieza a hablar y verás el texto en tu PC!
+5. ¡Empieza a hablar y verás el texto en tu PC copiándose mágicamente!
 
 ## 🛠️ Tecnologías Utilizadas
 
